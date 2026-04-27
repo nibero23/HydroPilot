@@ -1,4 +1,4 @@
-  import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -8,139 +8,118 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  double _minMoisture = 30;
-  double _pauseTime = 75;
-  double _maxPumpTime = 35;
-
-  bool _notifyAll = true;
-  bool _notifyDry = true;
-  bool _notifyTank = true;
+  // Die Zustände für unsere Schalter (Toggles)
+  bool pushNotifications = true;
+  bool emailNewsletter = false;
+  bool darkMode = true;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Schwellenwerte & Steuerung'),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Slider Bereich
-            _buildSectionContainer(
-              Column(
-                children: [
-                  _buildSlider('Feuchte-Minimum', _minMoisture, 0, 100, '%', (v) => setState(() => _minMoisture = v)),
-                  const Divider(color: Colors.grey),
-                  _buildSlider('Mindestpause', _pauseTime, 0, 120, ' Min.', (v) => setState(() => _pauseTime = v)),
-                  const Divider(color: Colors.grey),
-                  _buildSlider('Max. Pumpzeit', _maxPumpTime, 0, 60, ' Sek.', (v) => setState(() => _maxPumpTime = v)),
-                ],
+        title: const Text('Einstellungen', style: TextStyle(fontWeight: FontWeight.bold)),
+        centerTitle: true,
+        actions: [
+          // Glocken-Icon mit rotem Punkt
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              IconButton(icon: const Icon(Icons.notifications_none), onPressed: () {}),
+              Positioned(
+                right: 12,
+                top: 12,
+                child: Container(width: 8, height: 8, decoration: const BoxDecoration(color: Colors.red, shape: BoxShape.circle)),
               ),
-            ),
-            const SizedBox(height: 20),
-
-            // Kalibrierung
-            _buildSectionContainer(
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text('Kalibrierung', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                  const SizedBox(height: 16),
-                  Row(
-                    children: [
-                      Expanded(child: _buildCalibButton('Trocken (Dry)')),
-                      const SizedBox(width: 16),
-                      Expanded(child: _buildCalibButton('Feucht (Wet)')),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 20),
-
-            // Benachrichtigungen
-            _buildSectionContainer(
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text('Benachrichtigungen', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                  SwitchListTile(
-                    title: const Text('Alle Benachrichtigungen'),
-                    value: _notifyAll,
-                    activeThumbColor: const Color(0xFF00B26B),
-                    onChanged: (v) => setState(() => _notifyAll = v),
-                  ),
-                  SwitchListTile(
-                    title: const Text('Boden trocken'),
-                    value: _notifyDry,
-                    activeThumbColor: const Color(0xFF00B26B),
-                    onChanged: (v) => setState(() => _notifyDry = v),
-                  ),
-                  SwitchListTile(
-                    title: const Text('Tank niedrig'),
-                    value: _notifyTank,
-                    activeThumbColor: const Color(0xFF00B26B),
-                    onChanged: (v) => setState(() => _notifyTank = v),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSectionContainer(Widget child) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: const Color(0xFF1C232D),
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: child,
-    );
-  }
-
-  Widget _buildSlider(String title, double value, double min, double max, String unit, Function(double) onChanged) {
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(title),
-            Text('${value.toInt()}$unit', style: const TextStyle(color: Color(0xFF00B26B), fontWeight: FontWeight.bold)),
-          ],
-        ),
-        Slider(
-          value: value,
-          min: min,
-          max: max,
-          activeColor: const Color(0xFF00B26B),
-          inactiveColor: Colors.grey.withOpacity(0.3),
-          onChanged: onChanged,
-        ),
-      ],
-    );
-  }
-
-  Widget _buildCalibButton(String title) {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.white.withOpacity(0.05),
-        padding: const EdgeInsets.symmetric(vertical: 20),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      ),
-      onPressed: () {},
-      child: Column(
-        children: [
-          Text(title, style: const TextStyle(color: Colors.grey)),
-          const Text('—', style: TextStyle(fontSize: 24, color: Colors.white, fontWeight: FontWeight.bold)),
+            ],
+          ),
         ],
+      ),
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 600), // Damit es am PC gut aussieht
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // --- Sektion: Benachrichtigungen ---
+                const Text('Benachrichtigungen', style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold)),
+                const SizedBox(height: 8),
+                _buildSwitchTile('Push-Benachrichtigungen', pushNotifications, (val) => setState(() => pushNotifications = val)),
+                _buildSwitchTile('E-Mail Newsletter', emailNewsletter, (val) => setState(() => emailNewsletter = val)),
+                const SizedBox(height: 24),
+
+                // --- Sektion: Darstellung ---
+                const Text('Darstellung', style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold)),
+                const SizedBox(height: 8),
+                _buildSwitchTile('Dark Mode', darkMode, (val) => setState(() => darkMode = val)),
+                const SizedBox(height: 24),
+
+                // --- Sektion: Allgemein ---
+                const Text('Allgemein', style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold)),
+                const SizedBox(height: 8),
+                _buildListTile('Sprache', 'Deutsch'),
+                _buildListTile('Einheiten', 'Metrisch (°C, cm)'),
+                const SizedBox(height: 32),
+
+                // --- Sektion: Gefahrenzone ---
+                const Text('Gefahrenzone', style: TextStyle(color: Colors.redAccent, fontWeight: FontWeight.bold)),
+                const SizedBox(height: 12),
+                SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton.icon(
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: Colors.redAccent,
+                      side: const BorderSide(color: Colors.redAccent),
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    ),
+                    onPressed: () {
+                      // Hier kommt später die Lösch-Logik hin
+                    },
+                    icon: const Icon(Icons.delete_outline),
+                    label: const Text('Konto löschen', style: TextStyle(fontWeight: FontWeight.bold)),
+                  ),
+                ),
+                const SizedBox(height: 40),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  // Hilfsfunktion für die Schalter (Toggles)
+  Widget _buildSwitchTile(String title, bool value, Function(bool) onChanged) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 8),
+      decoration: BoxDecoration(color: const Color(0xFF1C232D), borderRadius: BorderRadius.circular(12)),
+      child: SwitchListTile(
+        title: Text(title, style: const TextStyle(color: Colors.white)),
+        value: value,
+        activeColor: const Color(0xFF00B26B),
+        onChanged: onChanged,
+      ),
+    );
+  }
+
+  // Hilfsfunktion für die Zeilen mit Text und Pfeil
+  Widget _buildListTile(String title, String trailingText) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 8),
+      decoration: BoxDecoration(color: const Color(0xFF1C232D), borderRadius: BorderRadius.circular(12)),
+      child: ListTile(
+        title: Text(title, style: const TextStyle(color: Colors.white)),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(trailingText, style: const TextStyle(color: Colors.grey)),
+            const SizedBox(width: 8),
+            const Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 14),
+          ],
+        ),
+        onTap: () {},
       ),
     );
   }

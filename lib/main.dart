@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart'; // NEU
+import 'firebase_options.dart'; // Diese Datei wird gleich von Firebase generiert!
 import 'screens/login_screen.dart';
 
-void main() {
+void main() async {
+  // NEU: Diese beiden Zeilen starten Firebase, bevor die App lädt
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   runApp(const HydroPilotApp());
 }
 
@@ -13,27 +21,12 @@ class HydroPilotApp extends StatelessWidget {
     return MaterialApp(
       title: 'HydroPilot',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData.dark().copyWith(
+      theme: ThemeData(
+        brightness: Brightness.dark,
         scaffoldBackgroundColor: const Color(0xFF12171E),
-        // HIER GEÄNDERT: 'brightness: Brightness.dark' zwingt die Schrift auf Weiß
-        colorScheme: ColorScheme.fromSeed(
-          brightness: Brightness.dark,
-          seedColor: const Color(0xFF00B26B),
-          primary: const Color(0xFF00B26B),
-          surface: const Color(0xFF1C232D),
-        ),
-        // Globale Textfarben explizit auf Weiß setzen
-        textTheme: ThemeData.dark().textTheme.apply(
-          bodyColor: Colors.white,
-          displayColor: Colors.white,
-        ),
-        appBarTheme: const AppBarTheme(
-          foregroundColor: Colors.white, // Macht die AppBar-Texte und Icons weiß
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-        ),
+        primaryColor: const Color(0xFF00B26B),
       ),
-      home: const LoginScreen(), 
+      home: const LoginScreen(),
     );
   }
 }

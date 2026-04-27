@@ -1,0 +1,114 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Luca\\source\\repos\\HydroPilot_Backend\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{D7886C74-ADAA-55E4-A430-6F8A5549A7C9}|HydroPilot_Backend\\HydroPilot_Backend.csproj|c:\\users\\luca\\source\\repos\\hydropilot_backend\\hydropilot_backend\\controllers\\topfgroessecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D7886C74-ADAA-55E4-A430-6F8A5549A7C9}|HydroPilot_Backend\\HydroPilot_Backend.csproj|solutionrelative:hydropilot_backend\\controllers\\topfgroessecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D7886C74-ADAA-55E4-A430-6F8A5549A7C9}|HydroPilot_Backend\\HydroPilot_Backend.csproj|c:\\users\\luca\\source\\repos\\hydropilot_backend\\hydropilot_backend\\controllers\\kundecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D7886C74-ADAA-55E4-A430-6F8A5549A7C9}|HydroPilot_Backend\\HydroPilot_Backend.csproj|solutionrelative:hydropilot_backend\\controllers\\kundecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D7886C74-ADAA-55E4-A430-6F8A5549A7C9}|HydroPilot_Backend\\HydroPilot_Backend.csproj|c:\\users\\luca\\source\\repos\\hydropilot_backend\\hydropilot_backend\\controllers\\toepfecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D7886C74-ADAA-55E4-A430-6F8A5549A7C9}|HydroPilot_Backend\\HydroPilot_Backend.csproj|solutionrelative:hydropilot_backend\\controllers\\toepfecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D7886C74-ADAA-55E4-A430-6F8A5549A7C9}|HydroPilot_Backend\\HydroPilot_Backend.csproj|c:\\users\\luca\\source\\repos\\hydropilot_backend\\hydropilot_backend\\controllers\\pflanzencontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D7886C74-ADAA-55E4-A430-6F8A5549A7C9}|HydroPilot_Backend\\HydroPilot_Backend.csproj|solutionrelative:hydropilot_backend\\controllers\\pflanzencontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D7886C74-ADAA-55E4-A430-6F8A5549A7C9}|HydroPilot_Backend\\HydroPilot_Backend.csproj|c:\\users\\luca\\source\\repos\\hydropilot_backend\\hydropilot_backend\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D7886C74-ADAA-55E4-A430-6F8A5549A7C9}|HydroPilot_Backend\\HydroPilot_Backend.csproj|solutionrelative:hydropilot_backend\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\Luca\\source\\repos\\HydroPilot_Backend\\HydroPilot_Backend\\Program.cs",
+              "RelativeDocumentMoniker": "HydroPilot_Backend\\Program.cs",
+              "ToolTip": "C:\\Users\\Luca\\source\\repos\\HydroPilot_Backend\\HydroPilot_Backend\\Program.cs",
+              "RelativeToolTip": "HydroPilot_Backend\\Program.cs",
+              "ViewState": "AgIAACcAAAAAAAAAAAAAADgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-22T14:19:40.36Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "TopfgroesseController.cs",
+              "DocumentMoniker": "C:\\Users\\Luca\\source\\repos\\HydroPilot_Backend\\HydroPilot_Backend\\Controllers\\TopfgroesseController.cs",
+              "RelativeDocumentMoniker": "HydroPilot_Backend\\Controllers\\TopfgroesseController.cs",
+              "ToolTip": "C:\\Users\\Luca\\source\\repos\\HydroPilot_Backend\\HydroPilot_Backend\\Controllers\\TopfgroesseController.cs",
+              "RelativeToolTip": "HydroPilot_Backend\\Controllers\\TopfgroesseController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-26T10:06:14.45Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "KundeController.cs",
+              "DocumentMoniker": "C:\\Users\\Luca\\source\\repos\\HydroPilot_Backend\\HydroPilot_Backend\\Controllers\\KundeController.cs",
+              "RelativeDocumentMoniker": "HydroPilot_Backend\\Controllers\\KundeController.cs",
+              "ToolTip": "C:\\Users\\Luca\\source\\repos\\HydroPilot_Backend\\HydroPilot_Backend\\Controllers\\KundeController.cs",
+              "RelativeToolTip": "HydroPilot_Backend\\Controllers\\KundeController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAC0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-26T10:06:07.844Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ToepfeController.cs",
+              "DocumentMoniker": "C:\\Users\\Luca\\source\\repos\\HydroPilot_Backend\\HydroPilot_Backend\\Controllers\\ToepfeController.cs",
+              "RelativeDocumentMoniker": "HydroPilot_Backend\\Controllers\\ToepfeController.cs",
+              "ToolTip": "C:\\Users\\Luca\\source\\repos\\HydroPilot_Backend\\HydroPilot_Backend\\Controllers\\ToepfeController.cs",
+              "RelativeToolTip": "HydroPilot_Backend\\Controllers\\ToepfeController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAJkBAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-26T10:05:52.881Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "PflanzenController.cs",
+              "DocumentMoniker": "C:\\Users\\Luca\\source\\repos\\HydroPilot_Backend\\HydroPilot_Backend\\Controllers\\PflanzenController.cs",
+              "RelativeDocumentMoniker": "HydroPilot_Backend\\Controllers\\PflanzenController.cs",
+              "ToolTip": "C:\\Users\\Luca\\source\\repos\\HydroPilot_Backend\\HydroPilot_Backend\\Controllers\\PflanzenController.cs",
+              "RelativeToolTip": "HydroPilot_Backend\\Controllers\\PflanzenController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAGcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-26T10:05:45.402Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

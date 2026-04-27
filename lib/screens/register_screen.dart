@@ -1,77 +1,124 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'login_screen.dart';
 
-class RegisterScreen extends StatelessWidget {
+class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
+
+  @override
+  State<RegisterScreen> createState() => _RegisterScreenState();
+}
+
+class _RegisterScreenState extends State<RegisterScreen> {
+  final _vornameController = TextEditingController();
+  final _nachnameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _usernameController = TextEditingController();
+  final _passwordController = TextEditingController();
+  
+  bool _isLoading = false;
+
+  // --- NEU: ECHTE FIREBASE REGISTRIERUNG ---
+  Future<void> _register() async {
+    if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Bitte fülle alle Felder aus.')));
+      return;
+    }
+
+    setState(() => _isLoading = true);
+    
+    try {
+      // 1. Account bei Firebase Authentication erstellen
+      UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+      );
+
+      // 2. Zusätzliche Infos (Vorname, Nachname) in der Firestore-Datenbank speichern
+      if (userCredential.user != null) {
+        await FirebaseFirestore.instance.collection('users').doc(userCredential.user!.uid).set({
+          'vorname': _vornameController.text.trim(),
+          'nachname': _nachnameController.text.trim(),
+          'benutzername': _usernameController.text.trim(),
+          'email': _emailController.text.trim(),
+          'createdAt': FieldValue.serverTimestamp(),
+        });
+      }
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Account erfolgreich erstellt! Bitte einloggen.'), backgroundColor: Color(0xFF00B26B)),
+        );
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LoginScreen()));
+      }
+    } on FirebaseAuthException catch (e) {
+      // Firebase gibt uns genaue Fehlermeldungen (z.B. Passwort zu schwach)
+      String errorMessage = 'Ein Fehler ist aufgetreten.';
+      if (e.code == 'weak-password') {
+        errorMessage = 'Das Passwort ist zu schwach (min. 6 Zeichen).';
+      } else if (e.code == 'email-already-in-use') {
+        errorMessage = 'Diese E-Mail-Adresse wird bereits verwendet.';
+      } else if (e.code == 'invalid-email') {
+        errorMessage = 'Ungültiges E-Mail-Format.';
+      }
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage), backgroundColor: Colors.redAccent));
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Fehler: $e'), backgroundColor: Colors.redAccent));
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text('Account erstellen', style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white)),
-              const SizedBox(height: 8),
-              Text('Werde Teil von HydroPilot.', style: TextStyle(fontSize: 16, color: Colors.grey.withValues(alpha: 0.8))),
-              const SizedBox(height: 40),
-
-              _buildField('Name', 'Max Mustermann', Icons.person_outline),
-              const SizedBox(height: 20),
-              _buildField('E-Mail', 'name@beispiel.de', Icons.email_outlined),
-              const SizedBox(height: 20),
-              _buildField('Passwort', 'Mindestens 8 Zeichen', Icons.lock_outline, isPassword: true),
-              const SizedBox(height: 40),
-
-              SizedBox(
-                width: double.infinity,
-                height: 55,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF00B26B),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                  ),
-                  onPressed: () {
-                    // Hier kommt später die Logik zum Account erstellen rein
-                  },
-                  child: const Text('Registrieren', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white)),
-                ),
+      appBar: AppBar(title: const Text('Registrieren')),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(24.0),
+        child: Column(
+          children: [
+            const Icon(Icons.person_add, size: 80, color: Color(0xFF00B26B)),
+            const SizedBox(height: 30),
+            _buildField(_vornameController, 'Vorname', Icons.badge_outlined),
+            _buildField(_nachnameController, 'Nachname', Icons.badge_outlined),
+            _buildField(_emailController, 'E-Mail', Icons.email_outlined),
+            _buildField(_usernameController, 'Benutzername', Icons.person_outline),
+            _buildField(_passwordController, 'Passwort (min. 6 Zeichen)', Icons.lock_outline, obscure: true),
+            const SizedBox(height: 30),
+            SizedBox(
+              width: double.infinity,
+              height: 55,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF00B26B)),
+                onPressed: _isLoading ? null : _register,
+                child: _isLoading 
+                  ? const CircularProgressIndicator(color: Colors.white)
+                  : const Text('Account erstellen', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
   }
 
-  Widget _buildField(String label, String hint, IconData icon, {bool isPassword = false}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(label, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-        const SizedBox(height: 8),
-        TextField(
-          obscureText: isPassword,
-          style: const TextStyle(color: Colors.white),
-          decoration: InputDecoration(
-            hintText: hint,
-            hintStyle: TextStyle(color: Colors.grey.withValues(alpha: 0.5)),
-            prefixIcon: Icon(icon, color: Colors.grey),
-            filled: true,
-            fillColor: const Color(0xFF1C232D),
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
-          ),
+  Widget _buildField(TextEditingController controller, String label, IconData icon, {bool obscure = false}) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: TextField(
+        controller: controller,
+        obscureText: obscure,
+        style: const TextStyle(color: Colors.white),
+        decoration: InputDecoration(
+          labelText: label,
+          labelStyle: const TextStyle(color: Colors.grey),
+          prefixIcon: Icon(icon, color: Colors.grey),
+          filled: true,
+          fillColor: const Color(0xFF1C232D),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
         ),
-      ],
+      ),
     );
   }
 }

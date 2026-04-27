@@ -1,0 +1,12 @@
+services:
+  pflanzen-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5000:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    extra_hosts:
+      - "host.docker.internal:host-gateway"  # für Linux, auf Windows/Mac nicht nötig aber schadet nicht
+    restart: unless-stopped

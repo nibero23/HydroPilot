@@ -5,6 +5,7 @@ import 'support_screen.dart';
 import 'login_screen.dart';
 import 'info_screen.dart';
 import 'legal_screen.dart';
+import 'add_pot_screen.dart';
 
 class PotsOverviewScreen extends StatefulWidget {
   const PotsOverviewScreen({super.key});
@@ -60,7 +61,15 @@ class _PotsOverviewScreenState extends State<PotsOverviewScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: ElevatedButton.icon(
               style: ElevatedButton.styleFrom(backgroundColor: Colors.white, foregroundColor: const Color(0xFF00B26B)),
-              onPressed: _showAddDialog,
+              onPressed: () async {
+  // Wir öffnen den neuen Screen und warten, bis der Nutzer fertig ist
+  await Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => const AddPotScreen()),
+  );
+  // Danach laden wir die Übersicht neu, damit der neue Topf erscheint
+  setState(() {});
+},
               icon: const Icon(Icons.add, size: 18),
               label: const Text('Hinzufügen', style: TextStyle(fontWeight: FontWeight.bold)),
             ),
