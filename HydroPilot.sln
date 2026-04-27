@@ -1,0 +1,29 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "HydroPilot_Backend", "HydroPilot_Backend", "{1D966AFE-C839-9D03-4F89-BEE310DF6832}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HydroPilot_Backend", "HydroPilot_Backend\HydroPilot_Backend\HydroPilot_Backend.csproj", "{2E7EED48-5390-C4CA-5FCB-14D66F0A7DDB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2E7EED48-5390-C4CA-5FCB-14D66F0A7DDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E7EED48-5390-C4CA-5FCB-14D66F0A7DDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E7EED48-5390-C4CA-5FCB-14D66F0A7DDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E7EED48-5390-C4CA-5FCB-14D66F0A7DDB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2E7EED48-5390-C4CA-5FCB-14D66F0A7DDB} = {1D966AFE-C839-9D03-4F89-BEE310DF6832}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F059B3D4-CCED-44D7-AB7B-54D368DBBDB7}
+	EndGlobalSection
+EndGlobal

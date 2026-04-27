@@ -1,24 +1,27 @@
 {
   "format": 1,
   "restore": {
-    "C:\\HydroPilot\\HydroPilot_Backend\\HydroPilot_Backend\\HydroPilot_Backend.csproj": {}
+    "E:\\VSC\\HydroPilot\\HydroPilot_Backend\\HydroPilot_Backend\\HydroPilot_Backend.csproj": {}
   },
   "projects": {
-    "C:\\HydroPilot\\HydroPilot_Backend\\HydroPilot_Backend\\HydroPilot_Backend.csproj": {
+    "E:\\VSC\\HydroPilot\\HydroPilot_Backend\\HydroPilot_Backend\\HydroPilot_Backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\HydroPilot\\HydroPilot_Backend\\HydroPilot_Backend\\HydroPilot_Backend.csproj",
+        "projectUniqueName": "E:\\VSC\\HydroPilot\\HydroPilot_Backend\\HydroPilot_Backend\\HydroPilot_Backend.csproj",
         "projectName": "HydroPilot_Backend",
-        "projectPath": "C:\\HydroPilot\\HydroPilot_Backend\\HydroPilot_Backend\\HydroPilot_Backend.csproj",
-        "packagesPath": "C:\\Users\\NiclasRosenmueller\\.nuget\\packages\\",
-        "outputPath": "C:\\HydroPilot\\HydroPilot_Backend\\HydroPilot_Backend\\obj\\",
+        "projectPath": "E:\\VSC\\HydroPilot\\HydroPilot_Backend\\HydroPilot_Backend\\HydroPilot_Backend.csproj",
+        "packagesPath": "C:\\Users\\niber\\.nuget\\packages\\",
+        "outputPath": "E:\\VSC\\HydroPilot\\HydroPilot_Backend\\HydroPilot_Backend\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\NiclasRosenmueller\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\niber\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net10.0"
         ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
         "frameworks": {
           "net10.0": {
             "targetAlias": "net10.0",

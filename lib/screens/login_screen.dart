@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'main_wrapper.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart' show kIsWeb; 
 import 'register_screen.dart';
+import 'pots_overview_screen.dart'; 
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -10,177 +12,157 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  bool _obscurePassword = true;
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  bool _isLoading = false;
 
-  // Später für die 2FA und das echte Backend:
-  // final TextEditingController _emailController = TextEditingController();
-  // final TextEditingController _passwordController = TextEditingController();
+  // --- STANDARD EMAIL & PASSWORT LOGIN ---
+  Future<void> _login() async {
+    if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Bitte fülle E-Mail und Passwort aus.')));
+      return;
+    }
 
-  void _login() {
-    // Hier kommt später die Logik rein:
-    // 1. Check Email/Passwort bei Firebase/Deinem Server
-    // 2. Sende 2FA Email
-    // 3. Wenn erfolgreich -> Navigation zur Haupt-App:
-    
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const MainWrapper()),
-    );
+    setState(() => _isLoading = true);
+
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+      );
+
+      if (mounted) {
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const PotsOverviewScreen()));
+      }
+    } on FirebaseAuthException catch (e) {
+      String errorMessage = 'Ein Fehler ist aufgetreten.';
+      if (e.code == 'user-not-found' || e.code == 'invalid-credential' || e.code == 'wrong-password') {
+        errorMessage = 'E-Mail oder Passwort ist falsch.';
+      }
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage), backgroundColor: Colors.redAccent));
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Fehler: $e'), backgroundColor: Colors.redAccent));
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
+  }
+
+  // --- DIE MODERNE, EINGEBAUTE FIREBASE GOOGLE METHODE ---
+  Future<void> _signInWithGoogle() async {
+    setState(() => _isLoading = true);
+
+    try {
+      // Wir nutzen direkt das Werkzeug, das Firebase uns standardmäßig mitgibt!
+      final provider = GoogleAuthProvider();
+
+      if (kIsWeb) {
+        // Öffnet das sichere Popup im Chrome-Browser
+        await FirebaseAuth.instance.signInWithPopup(provider);
+      } else {
+        // Für später, wenn wir die App aufs Handy bringen
+        await FirebaseAuth.instance.signInWithProvider(provider); 
+      }
+
+      // Wenn alles geklappt hat -> Ab ins Dashboard!
+      if (mounted) {
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const PotsOverviewScreen()));
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Google Login fehlgeschlagen: $e'), backgroundColor: Colors.redAccent),
+      );
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 40),
-              // Logo & Begrüßung
-              Center(
-                child: Column(
-                  children: [
-                    const Icon(Icons.eco, color: Color(0xFF00B26B), size: 60),
-                    const SizedBox(height: 16),
-                    const Text(
-                      'HydroPilot',
-                      style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Willkommen zurück!',
-                      style: TextStyle(fontSize: 16, color: Colors.grey.withValues(alpha: 0.8)),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 40),
-
-              // Email Feld
-              const Text('E-Mail', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-              const SizedBox(height: 8),
-              TextField(
-                keyboardType: TextInputType.emailAddress,
-                style: const TextStyle(color: Colors.white),
-                decoration: _inputStyle('name@beispiel.de', Icons.email_outlined),
-              ),
-              const SizedBox(height: 20),
-
-              // Passwort Feld
-              const Text('Passwort', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-              const SizedBox(height: 8),
-              TextField(
-                obscureText: _obscurePassword,
-                style: const TextStyle(color: Colors.white),
-                decoration: _inputStyle('Dein Passwort', Icons.lock_outline).copyWith(
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      _obscurePassword ? Icons.visibility_off : Icons.visibility,
-                      color: Colors.grey,
-                    ),
-                    onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+      backgroundColor: const Color(0xFF12171E),
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 400), 
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.water_drop, size: 80, color: Color(0xFF00B26B)),
+                const SizedBox(height: 20),
+                const Text('HydroPilot', style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white)),
+                const SizedBox(height: 40),
+                
+                TextField(
+                  controller: _emailController,
+                  style: const TextStyle(color: Colors.white),
+                  decoration: InputDecoration(
+                    labelText: 'E-Mail',
+                    labelStyle: const TextStyle(color: Colors.grey),
+                    prefixIcon: const Icon(Icons.email_outlined, color: Colors.grey),
+                    filled: true,
+                    fillColor: const Color(0xFF1C232D),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
                   ),
                 ),
-              ),
-
-              // Passwort vergessen
-              Align(
-                alignment: Alignment.centerRight,
-                child: TextButton(
-                  onPressed: () {
-                    // Aktion für "Passwort vergessen"
-                  },
-                  child: const Text('Passwort vergessen?', style: TextStyle(color: Color(0xFF00B26B))),
+                const SizedBox(height: 16),
+                
+                TextField(
+                  controller: _passwordController,
+                  obscureText: true, 
+                  style: const TextStyle(color: Colors.white),
+                  decoration: InputDecoration(
+                    labelText: 'Passwort',
+                    labelStyle: const TextStyle(color: Colors.grey),
+                    prefixIcon: const Icon(Icons.lock_outline, color: Colors.grey),
+                    filled: true,
+                    fillColor: const Color(0xFF1C232D),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+                  ),
                 ),
-              ),
-              const SizedBox(height: 20),
+                const SizedBox(height: 30),
+                
+                SizedBox(
+                  width: double.infinity,
+                  height: 55,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF00B26B), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
+                    onPressed: _isLoading ? null : _login, 
+                    child: _isLoading 
+                      ? const CircularProgressIndicator(color: Colors.white)
+                      : const Text('Anmelden', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
+                  ),
+                ),
+                
+                const SizedBox(height: 20),
+                const Text('oder', style: TextStyle(color: Colors.grey)),
+                const SizedBox(height: 20),
 
-              // Login Button
-              SizedBox(
-                width: double.infinity,
-                height: 55,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF00B26B),
+                // DER GOOGLE BUTTON
+                OutlinedButton.icon(
+                  style: OutlinedButton.styleFrom(
+                    minimumSize: const Size(double.infinity, 50),
+                    side: const BorderSide(color: Colors.grey),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                   ),
-                  onPressed: _login, // Ruft die Methode oben auf
-                  child: const Text('Anmelden', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white)),
+                  icon: const Icon(Icons.g_mobiledata, size: 30, color: Colors.white),
+                  label: const Text('Mit Google anmelden', style: TextStyle(color: Colors.white)),
+                  onPressed: _isLoading ? null : _signInWithGoogle,
                 ),
-              ),
-              const SizedBox(height: 30),
-
-              // Trenner "Oder"
-              Row(
-                children: [
-                  Expanded(child: Divider(color: Colors.grey.withValues(alpha: 0.3))),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16),
-                    child: Text('Oder anmelden mit', style: TextStyle(color: Colors.grey)),
-                  ),
-                  Expanded(child: Divider(color: Colors.grey.withValues(alpha: 0.3))),
-                ],
-              ),
-              const SizedBox(height: 30),
-
-              // Social Login Buttons
-              Row(
-                children: [
-                  Expanded(child: _socialButton(Icons.apple, 'Apple')),
-                  const SizedBox(width: 16),
-                  Expanded(child: _socialButton(Icons.g_mobiledata, 'Google')), // Platzhalter für Google Icon
-                ],
-              ),
-              const SizedBox(height: 40),
-
-              // Registrieren Link
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text('Noch keinen Account? ', style: TextStyle(color: Colors.grey)),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => const RegisterScreen()));
-                    },
-                    child: const Text('Hier registrieren', style: TextStyle(color: Color(0xFF00B26B), fontWeight: FontWeight.bold)),
-                  ),
-                ],
-              ),
-            ],
+                
+                const SizedBox(height: 20),
+                
+                TextButton(
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const RegisterScreen()));
+                  },
+                  child: const Text('Noch keinen Account? Registrieren', style: TextStyle(color: Color(0xFF00B26B))),
+                ),
+              ],
+            ),
           ),
         ),
       ),
-    );
-  }
-
-  // Hilfsfunktion für das Design der Textfelder
-  InputDecoration _inputStyle(String hint, IconData icon) {
-    return InputDecoration(
-      hintText: hint,
-      hintStyle: TextStyle(color: Colors.grey.withValues(alpha: 0.5)),
-      prefixIcon: Icon(icon, color: Colors.grey),
-      filled: true,
-      fillColor: const Color(0xFF1C232D),
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide.none,
-      ),
-    );
-  }
-
-  // Hilfsfunktion für Social Buttons
-  Widget _socialButton(IconData icon, String label) {
-    return OutlinedButton.icon(
-      style: OutlinedButton.styleFrom(
-        padding: const EdgeInsets.symmetric(vertical: 14),
-        side: BorderSide(color: Colors.grey.withValues(alpha: 0.3)),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      ),
-      onPressed: () {},
-      icon: Icon(icon, color: Colors.white, size: 24),
-      label: Text(label, style: const TextStyle(color: Colors.white)),
     );
   }
 }
