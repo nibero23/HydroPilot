@@ -13,12 +13,12 @@ FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 
-# ÄNDERUNG: Wir kopieren einfach alle .csproj-Dateien aus dem aktuellen Ordner
-COPY *.csproj ./
+# KORREKTUR: Wir holen die .csproj gezielt aus dem Unterordner ab
+COPY ["HydroPilot_Backend/HydroPilot_Backend.csproj", "./"]
 RUN dotnet restore
 
-# ÄNDERUNG: Wir kopieren den restlichen Code und bauen das Projekt direkt im aktuellen Verzeichnis
-COPY . .
+# KORREKTUR: Wir kopieren den restlichen Code aus dem Unterordner
+COPY ["HydroPilot_Backend/", "./"]
 RUN dotnet build -c $BUILD_CONFIGURATION -o /app/build
 
 # Diese Stufe wird verwendet, um das Dienstprojekt zu veröffentlichen, das in die letzte Phase kopiert werden soll.
