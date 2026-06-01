@@ -1,28 +1,17 @@
 {
   "version": 2,
-  "dgSpecHash": "v7Bg9zabOZg=",
-  "success": true,
-  "projectFilePath": "E:\\VSC\\HydroPilot\\HydroPilot_Backend\\HydroPilot_Backend\\HydroPilot_Backend.csproj",
-  "expectedPackageFiles": [
-    "C:\\Users\\niber\\.nuget\\packages\\dapper\\2.1.72\\dapper.2.1.72.nupkg.sha512",
-    "C:\\Users\\niber\\.nuget\\packages\\microsoft.extensions.apidescription.server\\10.0.0\\microsoft.extensions.apidescription.server.10.0.0.nupkg.sha512",
-    "C:\\Users\\niber\\.nuget\\packages\\microsoft.extensions.configuration\\10.0.7\\microsoft.extensions.configuration.10.0.7.nupkg.sha512",
-    "C:\\Users\\niber\\.nuget\\packages\\microsoft.extensions.configuration.json\\10.0.7\\microsoft.extensions.configuration.json.10.0.7.nupkg.sha512",
-    "C:\\Users\\niber\\.nuget\\packages\\microsoft.openapi\\2.4.1\\microsoft.openapi.2.4.1.nupkg.sha512",
-    "C:\\Users\\niber\\.nuget\\packages\\mysqlconnector\\2.5.0\\mysqlconnector.2.5.0.nupkg.sha512",
-    "C:\\Users\\niber\\.nuget\\packages\\swashbuckle.aspnetcore\\10.1.7\\swashbuckle.aspnetcore.10.1.7.nupkg.sha512",
-    "C:\\Users\\niber\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\10.1.7\\swashbuckle.aspnetcore.swagger.10.1.7.nupkg.sha512",
-    "C:\\Users\\niber\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\10.1.7\\swashbuckle.aspnetcore.swaggergen.10.1.7.nupkg.sha512",
-    "C:\\Users\\niber\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\10.1.7\\swashbuckle.aspnetcore.swaggerui.10.1.7.nupkg.sha512"
-  ],
+  "dgSpecHash": "AzhHBk6JnGo=",
+  "success": false,
+  "projectFilePath": "C:\\HydroPilot\\HydroPilot_Backend\\HydroPilot_Backend\\HydroPilot_Backend.csproj",
+  "expectedPackageFiles": [],
   "logs": [
     {
       "code": "NU1510",
       "level": "Warning",
       "message": "PackageReference Microsoft.Extensions.Configuration will not be pruned. Consider removing this package from your dependencies, as it is likely unnecessary.",
-      "projectPath": "E:\\VSC\\HydroPilot\\HydroPilot_Backend\\HydroPilot_Backend\\HydroPilot_Backend.csproj",
+      "projectPath": "C:\\HydroPilot\\HydroPilot_Backend\\HydroPilot_Backend\\HydroPilot_Backend.csproj",
       "warningLevel": 1,
-      "filePath": "E:\\VSC\\HydroPilot\\HydroPilot_Backend\\HydroPilot_Backend\\HydroPilot_Backend.csproj",
+      "filePath": "C:\\HydroPilot\\HydroPilot_Backend\\HydroPilot_Backend\\HydroPilot_Backend.csproj",
       "libraryId": "Microsoft.Extensions.Configuration",
       "targetGraphs": [
         "net10.0"
@@ -32,10 +21,76 @@
       "code": "NU1510",
       "level": "Warning",
       "message": "PackageReference Microsoft.Extensions.Configuration.Json will not be pruned. Consider removing this package from your dependencies, as it is likely unnecessary.",
-      "projectPath": "E:\\VSC\\HydroPilot\\HydroPilot_Backend\\HydroPilot_Backend\\HydroPilot_Backend.csproj",
+      "projectPath": "C:\\HydroPilot\\HydroPilot_Backend\\HydroPilot_Backend\\HydroPilot_Backend.csproj",
       "warningLevel": 1,
-      "filePath": "E:\\VSC\\HydroPilot\\HydroPilot_Backend\\HydroPilot_Backend\\HydroPilot_Backend.csproj",
+      "filePath": "C:\\HydroPilot\\HydroPilot_Backend\\HydroPilot_Backend\\HydroPilot_Backend.csproj",
       "libraryId": "Microsoft.Extensions.Configuration.Json",
+      "targetGraphs": [
+        "net10.0"
+      ]
+    },
+    {
+      "code": "NU1100",
+      "level": "Error",
+      "message": "Unable to resolve 'Dapper (>= 2.1.72)' for 'net10.0'.",
+      "projectPath": "C:\\HydroPilot\\HydroPilot_Backend\\HydroPilot_Backend\\HydroPilot_Backend.csproj",
+      "filePath": "C:\\HydroPilot\\HydroPilot_Backend\\HydroPilot_Backend\\HydroPilot_Backend.csproj",
+      "libraryId": "Dapper",
+      "targetGraphs": [
+        "net10.0"
+      ]
+    },
+    {
+      "code": "NU1100",
+      "level": "Error",
+      "message": "Unable to resolve 'Microsoft.Extensions.Configuration (>= 10.0.7)' for 'net10.0'.",
+      "projectPath": "C:\\HydroPilot\\HydroPilot_Backend\\HydroPilot_Backend\\HydroPilot_Backend.csproj",
+      "filePath": "C:\\HydroPilot\\HydroPilot_Backend\\HydroPilot_Backend\\HydroPilot_Backend.csproj",
+      "libraryId": "Microsoft.Extensions.Configuration",
+      "targetGraphs": [
+        "net10.0"
+      ]
+    },
+    {
+      "code": "NU1100",
+      "level": "Error",
+      "message": "Unable to resolve 'Microsoft.Extensions.Configuration.Json (>= 10.0.7)' for 'net10.0'.",
+      "projectPath": "C:\\HydroPilot\\HydroPilot_Backend\\HydroPilot_Backend\\HydroPilot_Backend.csproj",
+      "filePath": "C:\\HydroPilot\\HydroPilot_Backend\\HydroPilot_Backend\\HydroPilot_Backend.csproj",
+      "libraryId": "Microsoft.Extensions.Configuration.Json",
+      "targetGraphs": [
+        "net10.0"
+      ]
+    },
+    {
+      "code": "NU1100",
+      "level": "Error",
+      "message": "Unable to resolve 'MySqlConnector (>= 2.5.0)' for 'net10.0'.",
+      "projectPath": "C:\\HydroPilot\\HydroPilot_Backend\\HydroPilot_Backend\\HydroPilot_Backend.csproj",
+      "filePath": "C:\\HydroPilot\\HydroPilot_Backend\\HydroPilot_Backend\\HydroPilot_Backend.csproj",
+      "libraryId": "MySqlConnector",
+      "targetGraphs": [
+        "net10.0"
+      ]
+    },
+    {
+      "code": "NU1100",
+      "level": "Error",
+      "message": "Unable to resolve 'Swashbuckle.AspNetCore (>= 10.1.7)' for 'net10.0'.",
+      "projectPath": "C:\\HydroPilot\\HydroPilot_Backend\\HydroPilot_Backend\\HydroPilot_Backend.csproj",
+      "filePath": "C:\\HydroPilot\\HydroPilot_Backend\\HydroPilot_Backend\\HydroPilot_Backend.csproj",
+      "libraryId": "Swashbuckle.AspNetCore",
+      "targetGraphs": [
+        "net10.0"
+      ]
+    },
+    {
+      "code": "NU1100",
+      "level": "Error",
+      "message": "Unable to resolve 'Swashbuckle.AspNetCore.Swagger (>= 10.1.7)' for 'net10.0'.",
+      "projectPath": "C:\\HydroPilot\\HydroPilot_Backend\\HydroPilot_Backend\\HydroPilot_Backend.csproj",
+      "filePath": "C:\\HydroPilot\\HydroPilot_Backend\\HydroPilot_Backend\\HydroPilot_Backend.csproj",
+      "libraryId": "Swashbuckle.AspNetCore.Swagger",
       "targetGraphs": [
         "net10.0"
       ]

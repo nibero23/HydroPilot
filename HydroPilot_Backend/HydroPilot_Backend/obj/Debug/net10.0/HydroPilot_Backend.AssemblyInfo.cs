@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("HydroPilot_Backend")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0d28a768298b9744ced310aa51b9180304b7c202")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c6d992790cc823ec4bd80ea5450cc9ee58cfe108")]
 [assembly: System.Reflection.AssemblyProductAttribute("HydroPilot_Backend")]
 [assembly: System.Reflection.AssemblyTitleAttribute("HydroPilot_Backend")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
