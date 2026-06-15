@@ -12,18 +12,19 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["HydroPilot_Backend.csproj", "./"]
-#COPY ["HydroPilot_Backend/HydroPilot_Backend.csproj", "HydroPilot_Backend/"]
-RUN dotnet restore "HydroPilot_Backend.csproj" 
-#RUN dotnet restore "./HydroPilot_Backend/HydroPilot_Backend.csproj"
-COPY . .
-WORKDIR /src
-RUN dotnet build "HydroPilot_Backend.csproj" -c $BUILD_CONFIGURATION -o /app/build
+
+# KORREKTUR: Wir holen die .csproj gezielt aus dem Unterordner ab
+COPY ["HydroPilot_Backend/HydroPilot_Backend.csproj", "./"]
+RUN dotnet restore
+
+# KORREKTUR: Wir kopieren den restlichen Code aus dem Unterordner
+COPY ["HydroPilot_Backend/", "./"]
+RUN dotnet build -c $BUILD_CONFIGURATION -o /app/build
 
 # Diese Stufe wird verwendet, um das Dienstprojekt zu veröffentlichen, das in die letzte Phase kopiert werden soll.
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./HydroPilot_Backend.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 # Diese Stufe wird in der Produktion oder bei Ausführung von VS im regulären Modus verwendet (Standard, wenn die Debugkonfiguration nicht verwendet wird).
 FROM base AS final

@@ -1,27 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "E:\\VSC\\HydroPilot\\HydroPilot_Backend\\HydroPilot_Backend\\HydroPilot_Backend.csproj": {}
+    "C:\\HydroPilot\\HydroPilot_Backend\\HydroPilot_Backend\\HydroPilot_Backend.csproj": {}
   },
   "projects": {
-    "E:\\VSC\\HydroPilot\\HydroPilot_Backend\\HydroPilot_Backend\\HydroPilot_Backend.csproj": {
+    "C:\\HydroPilot\\HydroPilot_Backend\\HydroPilot_Backend\\HydroPilot_Backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\VSC\\HydroPilot\\HydroPilot_Backend\\HydroPilot_Backend\\HydroPilot_Backend.csproj",
+        "projectUniqueName": "C:\\HydroPilot\\HydroPilot_Backend\\HydroPilot_Backend\\HydroPilot_Backend.csproj",
         "projectName": "HydroPilot_Backend",
-        "projectPath": "E:\\VSC\\HydroPilot\\HydroPilot_Backend\\HydroPilot_Backend\\HydroPilot_Backend.csproj",
-        "packagesPath": "C:\\Users\\niber\\.nuget\\packages\\",
-        "outputPath": "E:\\VSC\\HydroPilot\\HydroPilot_Backend\\HydroPilot_Backend\\obj\\",
+        "projectPath": "C:\\HydroPilot\\HydroPilot_Backend\\HydroPilot_Backend\\HydroPilot_Backend.csproj",
+        "packagesPath": "C:\\Users\\NiclasRosenmueller\\.nuget\\packages\\",
+        "outputPath": "C:\\HydroPilot\\HydroPilot_Backend\\HydroPilot_Backend\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\niber\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\NiclasRosenmueller\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net10.0"
         ],
-        "sources": {
-          "https://api.nuget.org/v3/index.json": {}
-        },
         "frameworks": {
           "net10.0": {
             "targetAlias": "net10.0",
@@ -88,7 +85,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.203/PortableRuntimeIdentifierGraph.json",
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.204/PortableRuntimeIdentifierGraph.json",
           "packagesToPrune": {
             "Microsoft.AspNetCore": "(,10.0.32767]",
             "Microsoft.AspNetCore.Antiforgery": "(,10.0.32767]",
