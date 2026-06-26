@@ -23,6 +23,16 @@ class _AddPotScreenState extends State<AddPotScreen> {
   bool _isConnecting = false;
   bool _isSaving = false;
 
+  @override
+  void dispose() {
+    _pageController.dispose();
+    _ssidController.dispose();
+    _wifiPasswordController.dispose();
+    _potNameController.dispose();
+    _plantController.dispose();
+    super.dispose();
+  }
+
   void _nextStep() {
     if (_currentStep < 3) {
       _pageController.nextPage(
@@ -79,11 +89,13 @@ class _AddPotScreenState extends State<AddPotScreen> {
         _nextStep(); // Zum Erfolgs-Screen
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Fehler: $e'), backgroundColor: Colors.red),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Fehler: $e'), backgroundColor: Colors.red),
+        );
+      }
     } finally {
-      setState(() => _isSaving = false);
+      if (mounted) setState(() => _isSaving = false);
     }
   }
 
@@ -176,7 +188,7 @@ class _AddPotScreenState extends State<AddPotScreen> {
                 children: [
                   Container(
                     padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(color: const Color(0xFF00B26B).withOpacity(0.1), shape: BoxShape.circle),
+                    decoration: BoxDecoration(color: const Color(0xFF00B26B).withValues(alpha: 0.1), shape: BoxShape.circle),
                     child: const Icon(Icons.eco, color: Color(0xFF00B26B)),
                   ),
                   const SizedBox(width: 16),
@@ -345,7 +357,7 @@ class _AddPotScreenState extends State<AddPotScreen> {
       style: const TextStyle(color: Colors.white),
       decoration: InputDecoration(
         hintText: hint,
-        hintStyle: TextStyle(color: Colors.grey.withOpacity(0.5)),
+        hintStyle: TextStyle(color: Colors.grey.withValues(alpha: 0.5)),
         filled: true,
         fillColor: const Color(0xFF1C232D),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),

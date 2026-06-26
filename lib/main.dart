@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:provider/provider.dart'; // NEU
-import 'theme_provider.dart'; // NEU
+import 'package:provider/provider.dart'; // NEW
+import 'theme_provider.dart'; // NEW
 
 import 'firebase_options.dart'; 
 import 'screens/login_screen.dart'; 
@@ -17,7 +17,7 @@ void main() async {
       supportedLocales: const [Locale('de'), Locale('en'), Locale('tr'), Locale('fr'), Locale('es')],
       path: 'assets/translations', 
       fallbackLocale: const Locale('de'),
-      // NEU: Hier wickeln wir die App in den Provider ein
+      // NEW: Wrap the app in the provider
       child: ChangeNotifierProvider(
         create: (context) => ThemeProvider(),
         child: const HydroPilotApp(),
@@ -31,7 +31,7 @@ class HydroPilotApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Hier hören wir auf den Lautsprecher!
+    // Listen to the provider
     final themeProvider = Provider.of<ThemeProvider>(context);
 
     return MaterialApp(
@@ -41,10 +41,10 @@ class HydroPilotApp extends StatelessWidget {
       supportedLocales: context.supportedLocales,
       locale: context.locale,
 
-      // NEU: Das Theme wird jetzt live aus dem Provider gesteuert
+      // NEW: Theme is now controlled live from the provider
       themeMode: themeProvider.themeMode, 
       
-      // Helles Theme
+      // Light theme
       theme: ThemeData(
         brightness: Brightness.light,
         primaryColor: themeProvider.accentColor,
@@ -52,7 +52,7 @@ class HydroPilotApp extends StatelessWidget {
         scaffoldBackgroundColor: Colors.white,
       ),
 
-      // Dunkles Theme
+      // Dark theme
       darkTheme: ThemeData(
         brightness: Brightness.dark,
         primaryColor: themeProvider.accentColor,

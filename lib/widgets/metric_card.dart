@@ -24,7 +24,7 @@ class MetricCard extends StatelessWidget {
         color: const Color(0xFF1C232D),
         borderRadius: BorderRadius.circular(20),
         // Ein ganz dezenter Rahmen für mehr Tiefe
-        border: Border.all(color: Colors.white.withOpacity(0.03)),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.03)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -71,7 +71,7 @@ class MetricCard extends StatelessWidget {
               child: Text(
                 subtitle!,
                 style: TextStyle(
-                  color: Colors.grey.withOpacity(0.8),
+                  color: Colors.grey.withValues(alpha: 0.8),
                   fontSize: 10,
                 ),
               ),

@@ -111,7 +111,7 @@ class _PlantLibraryScreenState extends State<PlantLibraryScreen> {
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: const Color(0xFF2A3441).withOpacity(0.5),
+              color: const Color(0xFF2A3441).withValues(alpha: 0.5),
               shape: BoxShape.circle,
             ),
             child: Text(plant['image']!, style: const TextStyle(fontSize: 28)),

@@ -64,12 +64,12 @@ class PlanCard extends StatelessWidget {
                   padding: const EdgeInsets.only(bottom: 12.0),
                   child: Row(
                     children: [
-                      Icon(included ? Icons.check : Icons.remove, color: included ? accentColor : Colors.grey.withOpacity(0.5), size: 20),
+                      Icon(included ? Icons.check : Icons.remove, color: included ? accentColor : Colors.grey.withValues(alpha: 0.5), size: 20),
                       const SizedBox(width: 12),
                       Text(
                         feature['title'],
                         style: TextStyle(
-                          color: included ? Colors.white : Colors.grey.withOpacity(0.5),
+                          color: included ? Colors.white : Colors.grey.withValues(alpha: 0.5),
                           decoration: included ? TextDecoration.none : TextDecoration.lineThrough,
                         ),
                       ),
@@ -83,7 +83,7 @@ class PlanCard extends StatelessWidget {
                 height: 50,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: isActive ? Colors.white.withOpacity(0.1) : accentColor,
+                    backgroundColor: isActive ? Colors.white.withValues(alpha: 0.1) : accentColor,
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                   ),
                   onPressed: () {},

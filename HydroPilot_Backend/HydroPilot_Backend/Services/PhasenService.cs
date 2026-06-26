@@ -13,7 +13,7 @@ public class PhasenService
 
     public async Task<Phase?> GetAktuellePhaseAsync(Topf topf)
     {
-        int tageSeitPflanzung = (DateTime.Today - topf.Pflanzungsdatum.Date).Days;
+        int tageSeitPflanzung = (DateTime.UtcNow.Date - topf.Pflanzungsdatum.Date).Days;
         Console.WriteLine($"[Phase] Topf {topf.Id}: {tageSeitPflanzung} Tage seit Pflanzung");
 
         var phase = await _stammdaten.GetAktuellePhaseAsync(topf.PflanzenId, tageSeitPflanzung);

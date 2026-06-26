@@ -78,7 +78,7 @@ class PremiumScreen extends StatelessWidget {
                       subtitle: 'plan_pro_sub'.tr(),
                       price: 'plan_pro_price'.tr(),
                       period: 'plan_month_period'.tr(),
-                      borderColor: Colors.white.withOpacity(0.1),
+                      borderColor: Colors.white.withValues(alpha:0.1),
                       buttonText: 'btn_choose_pro'.tr(),
                       buttonBgColor: Colors.white,
                       buttonTextColor: const Color(0xFF12171E),
@@ -207,17 +207,17 @@ class PremiumScreen extends StatelessWidget {
         children: [
           Icon(
             isActive ? Icons.check : Icons.remove,
-            color: isActive ? const Color(0xFF00B26B) : Colors.grey.withOpacity(0.5),
+            color: isActive ? const Color(0xFF00B26B) : Colors.grey.withValues(alpha:0.5),
             size: 18,
           ),
           const SizedBox(width: 12),
           Text(
             text,
             style: TextStyle(
-              color: isActive ? Colors.white : Colors.grey.withOpacity(0.4),
+              color: isActive ? Colors.white : Colors.grey.withValues(alpha:0.4),
               fontSize: 14,
               decoration: isActive ? TextDecoration.none : TextDecoration.lineThrough,
-              decorationColor: Colors.grey.withOpacity(0.4),
+              decorationColor: Colors.grey.withValues(alpha:0.4),
             ),
           ),
         ],

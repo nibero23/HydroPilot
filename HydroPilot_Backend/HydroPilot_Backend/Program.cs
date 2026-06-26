@@ -5,11 +5,30 @@
 // NuGet Pakete:
 // Install-Package Dapper
 // Install-Package MySqlConnector
+// Install-Package BCrypt.Net-Next
 // Install-Package Microsoft.Extensions.Configuration
 // Install-Package Microsoft.Extensions.Configuration.Json
 // ============================================================
 
 var builder = WebApplication.CreateBuilder(args);
+
+// ----------------------------------------------------------
+// CORS konfigurieren
+// ----------------------------------------------------------
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFlutterApp", policy =>
+    {
+        policy
+            .WithOrigins(
+                "https://hydropilot.onrender.com",
+                "http://localhost:8080",
+                "http://localhost:3000"
+            )
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+    });
+});
 
 // ----------------------------------------------------------
 // Services registrieren (Dependency Injection)
@@ -47,10 +66,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors("AllowFlutterApp");
 app.UseAuthorization();
 app.MapControllers();
 
-Console.WriteLine("Server gestartet. Warte auf Daten vom ESP32...");
-Console.WriteLine("Swagger UI: http://localhost:5000/swagger");
+app.Logger.LogInformation("Server gestartet. Warte auf Daten vom ESP32...");
+app.Logger.LogInformation("Swagger UI: http://localhost:5000/swagger");
 
 app.Run();

@@ -38,6 +38,9 @@ public class SensordatenController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<SensordatenResponse>> PostSensordaten([FromBody] SensordatenRequest request)
     {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
         Console.WriteLine($"\n[API] Neue Sensordaten von Topf {request.TopfId}");
         Console.WriteLine($"      Temp: {request.Temperatur}°C | Luft: {request.Luftfeuchtigkeit}% | Boden: {request.Bodenfeuchte}%");
  
@@ -52,7 +55,7 @@ public class SensordatenController : ControllerBase
         // 2. Sensordaten speichern
         await _betriebsdaten.SaveSensordatenAsync(new SensordatenEintrag
         {
-            Timestamp        = DateTime.Now,
+            Timestamp        = DateTime.UtcNow,
             Temperatur       = request.Temperatur,
             Luftfeuchtigkeit = request.Luftfeuchtigkeit,
             Bodenfeuchte     = request.Bodenfeuchte,

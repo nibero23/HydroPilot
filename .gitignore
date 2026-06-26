@@ -1,3 +1,7 @@
+# ASP.NET Core Secrets (niemals Produktions-Credentials einchecken!)
+**/appsettings.Production.json
+**/appsettings.Local.json
+
 # Miscellaneous
 *.class
 *.log

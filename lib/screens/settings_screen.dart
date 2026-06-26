@@ -114,7 +114,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       decoration: BoxDecoration(
         color: isDark ? const Color(0xFF151A22) : Colors.grey.shade100, // Reagiert auf Hell/Dunkel
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: isDark ? Colors.white.withOpacity(0.05) : Colors.grey.shade300, width: 1),
+        border: Border.all(color: isDark ? Colors.white.withValues(alpha:0.05) : Colors.grey.shade300, width: 1),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -247,7 +247,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           decoration: BoxDecoration(
             color: isDark ? const Color(0xFF151A22) : Colors.white,
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: isDark ? Colors.white.withOpacity(0.2) : Colors.grey.shade300),
+            border: Border.all(color: isDark ? Colors.white.withValues(alpha:0.2) : Colors.grey.shade300),
           ),
           child: DropdownButtonHideUnderline(
             child: DropdownButton<String>(

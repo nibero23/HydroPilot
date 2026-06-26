@@ -28,7 +28,7 @@ public class GiessService
         bool intervallErreicht = true;
         if (letzterGuss.HasValue)
         {
-            int tageSeitletztemGuss = (DateTime.Today - letzterGuss.Value.Date).Days;
+            int tageSeitletztemGuss = (DateTime.UtcNow.Date - letzterGuss.Value.Date).Days;
             intervallErreicht = tageSeitletztemGuss >= phase.GiessIntervallTag;
             Console.WriteLine($"[Gießen] Letzter Guss vor {tageSeitletztemGuss} Tag(en), Intervall: {phase.GiessIntervallTag} Tag(e)");
         }

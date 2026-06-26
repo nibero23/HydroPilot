@@ -2,25 +2,22 @@
 // Controllers/AuthController.cs
 // POST /api/auth/register  → Kunden registrieren
 // POST /api/auth/login     → Kunden einloggen
-//
-// HINWEIS: Passwort wird aktuell nur als SHA256 Hash gespeichert.
-// Später ersetzen durch BCrypt + JWT Token!
 // ============================================================
 
-using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Cryptography;
-using System.Text;
+using System.ComponentModel.DataAnnotations;
 
 [ApiController]
 [Route("api/auth")]
 public class AuthController : ControllerBase
 {
     private readonly AuthRepository _repo;
+    private readonly ILogger<AuthController> _logger;
 
-    public AuthController(AuthRepository repo)
+    public AuthController(AuthRepository repo, ILogger<AuthController> logger)
     {
         _repo = repo;
+        _logger = logger;
     }
 
     // ----------------------------------------------------------
@@ -29,15 +26,14 @@ public class AuthController : ControllerBase
     [HttpPost("register")]
     public async Task<ActionResult<AuthResponse>> Register([FromBody] RegisterRequest request)
     {
-        // Prüfen ob Benutzername oder Email schon vergeben
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
         bool existiert = await _repo.BenutzerExistiertAsync(request.Benutzername, request.Email);
         if (existiert)
-        {
             return Conflict("Benutzername oder Email ist bereits vergeben");
-        }
 
-        // Passwort hashen (SHA256 – später durch BCrypt ersetzen!)
-        string passwortHash = HashPasswort(request.Passwort);
+        string passwortHash = BCrypt.Net.BCrypt.HashPassword(request.Passwort, workFactor: 12);
 
         var neuerKunde = new Kunde
         {
@@ -55,7 +51,7 @@ public class AuthController : ControllerBase
         };
 
         int neueId = await _repo.RegistrierenAsync(neuerKunde);
-        Console.WriteLine($"[Auth] Neuer Kunde registriert: {request.Benutzername} (ID: {neueId})");
+        _logger.LogInformation("Neuer Kunde registriert: {Benutzername} (ID: {Id})", request.Benutzername, neueId);
 
         return Ok(new AuthResponse
         {
@@ -73,21 +69,18 @@ public class AuthController : ControllerBase
     [HttpPost("login")]
     public async Task<ActionResult<AuthResponse>> Login([FromBody] LoginRequest request)
     {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
         var kunde = await _repo.GetKundeByBenutzernameAsync(request.Benutzername);
 
-        if (kunde == null)
-        {
-            return Unauthorized("Benutzername oder Passwort falsch");
-        }
+        // Timing-safe: immer prüfen, auch wenn Kunde nicht existiert
+        bool passwortKorrekt = kunde != null && BCrypt.Net.BCrypt.Verify(request.Passwort, kunde.PasswortHash);
 
-        // Passwort prüfen
-        string eingabeHash = HashPasswort(request.Passwort);
-        if (eingabeHash != kunde.PasswortHash)
-        {
+        if (kunde == null || !passwortKorrekt)
             return Unauthorized("Benutzername oder Passwort falsch");
-        }
 
-        Console.WriteLine($"[Auth] Login erfolgreich: {kunde.Benutzername} (ID: {kunde.Id})");
+        _logger.LogInformation("Login erfolgreich: {Benutzername} (ID: {Id})", kunde.Benutzername, kunde.Id);
 
         return Ok(new AuthResponse
         {
@@ -97,15 +90,5 @@ public class AuthController : ControllerBase
             Nachname = kunde.Nachname,
             Nachricht = "Login erfolgreich"
         });
-    }
-
-    // ----------------------------------------------------------
-    // SHA256 Hash – wird später durch BCrypt ersetzt
-    // ----------------------------------------------------------
-    private static string HashPasswort(string passwort)
-    {
-        using var sha256 = SHA256.Create();
-        byte[] bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(passwort));
-        return Convert.ToHexString(bytes).ToLower();
     }
 }

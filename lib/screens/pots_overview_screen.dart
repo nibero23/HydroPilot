@@ -43,9 +43,9 @@ class _PotsOverviewScreenState extends State<PotsOverviewScreen> {
                 decoration: BoxDecoration(
                   color: const Color(0xFF151A22), // Dunkler Hintergrund
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.white.withOpacity(0.05)),
+                  border: Border.all(color: Colors.white.withValues(alpha:0.05)),
                   boxShadow: [
-                    BoxShadow(color: Colors.black.withOpacity(0.5), blurRadius: 20, offset: const Offset(0, 10)),
+                    BoxShadow(color: Colors.black.withValues(alpha:0.5), blurRadius: 20, offset: const Offset(0, 10)),
                   ],
                 ),
                 child: Column(
@@ -273,7 +273,7 @@ class _PotsOverviewScreenState extends State<PotsOverviewScreen> {
               children: [
                 Container(
                   padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(color: const Color(0xFF00B26B).withOpacity(0.1), borderRadius: BorderRadius.circular(12)),
+                  decoration: BoxDecoration(color: const Color(0xFF00B26B).withValues(alpha:0.1), borderRadius: BorderRadius.circular(12)),
                   child: const Icon(Icons.water_drop, color: Color(0xFF00B26B), size: 28),
                 ),
                 Container(
