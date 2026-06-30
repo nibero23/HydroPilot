@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'dashboard_screen.dart';
 import 'support_screen.dart';
 import 'login_screen.dart';
@@ -20,6 +21,110 @@ class PotsOverviewScreen extends StatefulWidget {
 class _PotsOverviewScreenState extends State<PotsOverviewScreen> {
   int _currentIndex = 0;
   bool _isEditMode = false;
+  String _userPlan = 'free';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadPlan();
+  }
+
+  Future<void> _loadPlan() async {
+    final uid = FirebaseAuth.instance.currentUser?.uid;
+    if (uid == null) return;
+    final doc = await FirebaseFirestore.instance.collection('users').doc(uid).get();
+    if (mounted) setState(() => _userPlan = (doc.data()?['plan'] as String?) ?? 'free');
+  }
+
+  int get _potLimit => _userPlan == 'pro' ? 999 : _userPlan == 'plus' ? 5 : 1;
+
+  Future<void> _tryAddPot(BuildContext ctx) async {
+    final uid = FirebaseAuth.instance.currentUser?.uid;
+    if (uid == null) return;
+    final snap = await FirebaseFirestore.instance
+        .collection('pots')
+        .where('userId', isEqualTo: uid)
+        .count()
+        .get();
+    final count = snap.count ?? 0;
+    if (!ctx.mounted) return;
+    if (count >= _potLimit) {
+      final needed = _userPlan == 'free' ? 'Plus' : 'Pro';
+      final size = MediaQuery.of(ctx).size;
+      showDialog(
+        context: ctx,
+        builder: (dialogCtx) => Dialog(
+          backgroundColor: const Color(0xFF1C232D),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+          child: SizedBox(
+            width: size.width * 0.85,
+            height: size.height * 0.40,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 32),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    children: [
+                      Container(
+                        width: 64,
+                        height: 64,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF00B26B).withValues(alpha: 0.12),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(Icons.lock_outline, color: Color(0xFF00B26B), size: 30),
+                      ),
+                      const SizedBox(height: 16),
+                      const Text(
+                        'Topf-Limit erreicht',
+                        style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Mit deinem aktuellen Plan kannst du nicht mehr Töpfe hinzufügen. Upgrade auf $needed.',
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(color: Colors.grey, fontSize: 14, height: 1.5),
+                      ),
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      SizedBox(
+                        width: double.infinity,
+                        height: 50,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF00B26B),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                          ),
+                          onPressed: () {
+                            Navigator.pop(dialogCtx);
+                            setState(() => _currentIndex = 1);
+                          },
+                          child: Text(
+                            '$needed freischalten',
+                            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      TextButton(
+                        onPressed: () => Navigator.pop(dialogCtx),
+                        child: const Text('Vielleicht später', style: TextStyle(color: Colors.grey, fontSize: 13)),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+      return;
+    }
+    Navigator.push(ctx, MaterialPageRoute(builder: (_) => const AddPotScreen()));
+  }
   
   // Test-Liste für Benachrichtigungen. 
   // Leer = Kein roter Punkt. 
@@ -57,7 +162,7 @@ class _PotsOverviewScreenState extends State<PotsOverviewScreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text('Benachrichtigungen', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14)),
+                          Text('notifications_title'.tr(), style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14)),
                           InkWell(
                             onTap: () => Navigator.pop(context),
                             child: const Icon(Icons.close, color: Colors.grey, size: 16),
@@ -71,7 +176,7 @@ class _PotsOverviewScreenState extends State<PotsOverviewScreen> {
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 32.0, horizontal: 16.0),
                       child: _notifications.isEmpty
-                          ? const Text('Keine neuen Benachrichtigungen', style: TextStyle(color: Colors.grey, fontSize: 13))
+                          ? Text('no_new_notifications'.tr(), style: const TextStyle(color: Colors.grey, fontSize: 13))
                           : Column(
                               children: _notifications.map((note) => 
                                 Padding(
@@ -95,9 +200,9 @@ class _PotsOverviewScreenState extends State<PotsOverviewScreen> {
   Widget build(BuildContext context) {
     final String? currentUserId = FirebaseAuth.instance.currentUser?.uid;
 
-    String appBarTitle = 'Meine Töpfe';
-    if (_currentIndex == 1) appBarTitle = 'Abo & Premium';
-    if (_currentIndex == 2) appBarTitle = 'Einstellungen';
+    String appBarTitle = 'my_pots'.tr();
+    if (_currentIndex == 1) appBarTitle = 'premium_tab'.tr();
+    if (_currentIndex == 2) appBarTitle = 'settings_tab'.tr();
 
     // --- TÖPFE INHALT (Index 0) ---
     Widget potsContent = Center(
@@ -110,7 +215,7 @@ class _PotsOverviewScreenState extends State<PotsOverviewScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text('Ziehen zum Sortieren • Tippe zum Anpassen', style: TextStyle(color: Colors.grey, fontSize: 12)),
+                  Text('drag_to_sort'.tr(), style: const TextStyle(color: Colors.grey, fontSize: 12)),
                   TextButton.icon(
                     style: TextButton.styleFrom(
                       backgroundColor: _isEditMode ? const Color(0xFF00B26B) : const Color(0xFF1C232D),
@@ -124,7 +229,7 @@ class _PotsOverviewScreenState extends State<PotsOverviewScreen> {
                       });
                     },
                     icon: Icon(_isEditMode ? Icons.check : Icons.tune, size: 16),
-                    label: Text(_isEditMode ? 'Fertig' : 'Anpassen'),
+                    label: Text(_isEditMode ? 'done'.tr() : 'customize'.tr()),
                   ),
                 ],
               ),
@@ -143,8 +248,8 @@ class _PotsOverviewScreenState extends State<PotsOverviewScreen> {
                   final docs = snapshot.data?.docs ?? [];
 
                   if (docs.isEmpty) {
-                    return const Center(
-                      child: Text('Noch keine Töpfe vorhanden.\nKlicke oben auf "Hinzufügen"!', textAlign: TextAlign.center, style: TextStyle(color: Colors.grey, fontSize: 16)),
+                    return Center(
+                      child: Text('no_pots_yet'.tr(), textAlign: TextAlign.center, style: const TextStyle(color: Colors.grey, fontSize: 16)),
                     );
                   }
 
@@ -223,11 +328,9 @@ class _PotsOverviewScreenState extends State<PotsOverviewScreen> {
                   foregroundColor: const Color(0xFF00B26B),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),
-                onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const AddPotScreen()));
-                },
+                onPressed: () => _tryAddPot(context),
                 icon: const Icon(Icons.add, size: 18),
-                label: const Text('Hinzufügen', style: TextStyle(fontWeight: FontWeight.bold)),
+                label: Text('add'.tr(), style: const TextStyle(fontWeight: FontWeight.bold)),
               ),
             ),
         ],
@@ -246,10 +349,10 @@ class _PotsOverviewScreenState extends State<PotsOverviewScreen> {
             _currentIndex = index;
           });
         },
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home_filled), label: 'Töpfe'),
-          BottomNavigationBarItem(icon: Icon(Icons.workspace_premium), label: 'Premium'),
-          BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Einstellungen'),
+        items: [
+          BottomNavigationBarItem(icon: const Icon(Icons.home_filled), label: 'pots_tab'.tr()),
+          BottomNavigationBarItem(icon: const Icon(Icons.workspace_premium), label: 'premium_tab'.tr()),
+          BottomNavigationBarItem(icon: const Icon(Icons.settings), label: 'settings_tab'.tr()),
         ],
       ),
     );
@@ -284,8 +387,8 @@ class _PotsOverviewScreenState extends State<PotsOverviewScreen> {
               ],
             ),
             const SizedBox(height: 16),
-            Text(data['name'] ?? 'Unbenannt', style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis),
-            Text(data['location'] ?? 'Kein Standort', style: const TextStyle(color: Colors.grey, fontSize: 13)),
+            Text(data['name'] ?? 'unnamed'.tr(), style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis),
+            Text(data['location'] ?? 'no_location'.tr(), style: const TextStyle(color: Colors.grey, fontSize: 13)),
             const Spacer(),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -324,7 +427,7 @@ class _PotsOverviewScreenState extends State<PotsOverviewScreen> {
                 await FirebaseFirestore.instance.collection('pots').doc(docs[index].id).delete();
               },
             ),
-            title: Text(data['name'] ?? 'Unbenannt', style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
+            title: Text(data['name'] ?? 'unnamed'.tr(), style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
             subtitle: Text(data['location'] ?? '', style: const TextStyle(color: Colors.grey)),
             trailing: const Icon(Icons.drag_handle, color: Colors.grey, size: 28),
           ),
@@ -346,7 +449,7 @@ class _PotsOverviewScreenState extends State<PotsOverviewScreen> {
                 child: const Icon(Icons.water_drop, color: Colors.white),
               ),
               title: const Text('HydroPilot', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18)),
-              subtitle: const Text('Smart Watering', style: TextStyle(color: Colors.grey)),
+              subtitle: Text('drawer_subtitle'.tr(), style: const TextStyle(color: Colors.grey)),
               trailing: IconButton(
                 icon: const Icon(Icons.close, color: Colors.grey),
                 onPressed: () => Navigator.pop(context),
@@ -355,24 +458,24 @@ class _PotsOverviewScreenState extends State<PotsOverviewScreen> {
             const Divider(color: Colors.grey),
             ListTile(
               leading: const Icon(Icons.help_outline, color: Colors.white),
-              title: const Text('Support', style: TextStyle(color: Colors.white)),
+              title: Text('support'.tr(), style: const TextStyle(color: Colors.white)),
               onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const SupportScreen())),
             ),
             ListTile(
               leading: const Icon(Icons.info_outline, color: Colors.white),
-              title: const Text('Über HydroPilot', style: TextStyle(color: Colors.white)),
+              title: Text('about'.tr(), style: const TextStyle(color: Colors.white)),
               onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const InfoScreen())),
             ),
             ListTile(
               leading: const Icon(Icons.shield_outlined, color: Colors.white),
-              title: const Text('Impressum & Datenschutz', style: TextStyle(color: Colors.white)),
+              title: Text('legal'.tr(), style: const TextStyle(color: Colors.white)),
               onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const LegalScreen())),
             ),
             const Spacer(),
             const Divider(color: Colors.grey),
             ListTile(
               leading: const Icon(Icons.logout, color: Colors.red),
-              title: const Text('Abmelden', style: TextStyle(color: Colors.red)),
+              title: Text('logout'.tr(), style: const TextStyle(color: Colors.red)),
               onTap: () async {
                 await FirebaseAuth.instance.signOut();
                 if (context.mounted) {
